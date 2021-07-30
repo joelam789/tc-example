@@ -1,0 +1,30 @@
+
+{
+    "topbar": {
+        "game": "Game",
+        "table": "Table",
+        "dealer": "Dealer",
+        "logout": "Logout",
+        "flag-img": "./img/flags/uk.png",
+        "language": "Language",
+        "english": "English",
+        "chinese": "Chinese"
+    },
+
+    "lobby": {
+        "ok": "OK",
+        "cancel": "Cancel"
+    },
+
+    "game": {
+        "game": "Game",
+        "table": "Table",
+        "dealer": "Dealer",
+        "log": "Log",
+        "video": "Video",
+        "cards": "Cards",
+        "status": "Status",
+        "info": "Information",
+        "operation": "Operation"
+    }
+}

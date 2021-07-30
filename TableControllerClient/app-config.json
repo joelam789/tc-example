@@ -1,0 +1,12 @@
+{
+
+  "defaultGame": "baccarat",
+  "defaultTable": "b1",
+  "defaultDealer": "d1",
+
+  "countOptions": [1, 2, 3, 5, 10, 20, 30, 40, 50, 100],
+  "videoPageUrl": "https://cash-api.sod888.com/LIVE_TEST/wowza/src/play-cdn.html",
+
+  "serverAddress": "ws://127.0.0.1:13130"
+
+}

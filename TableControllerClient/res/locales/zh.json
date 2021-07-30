@@ -1,0 +1,32 @@
+
+{
+
+    "topbar": {
+        "game": "游戏",
+        "table": "台号",
+        "dealer": "荷官",
+        "logout": "登出",
+        "flag-img": "./img/flags/china.png",
+        "language": "语言",
+        "english": "英文",
+        "chinese": "中文"
+    },
+
+    "lobby": {
+        "ok": "确定",
+        "cancel": "取消"
+    },
+
+    "game": {
+        "game": "游戏",
+        "table": "台号",
+        "dealer": "荷官",
+        "log": "日志",
+        "video": "视频",
+        "cards": "纸牌",
+        "status": "状态",
+        "info": "资料",
+        "operation": "操作"
+    }
+
+}

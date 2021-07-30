@@ -1,0 +1,267 @@
+<template>
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+
+        <div class="navbar-header" style="display:table; margin-top: 8px">
+          <a class="navbar-brand" href="#/game-table" click.delegate="logout()"><span i18n="topbar.logout">Logout</span></a>
+        </div>
+
+        <div class="collapse navbar-collapse center-block" id="navbar-ex-collapse">
+
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                 <img i18n="topbar.flag-img"/>&nbsp;<span i18n="topbar.language">Language</span>&nbsp;<span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#/game-table" click.delegate="changeLang('en')" i18n="topbar.english">English</a></li>
+                <li><a href="#/game-table" click.delegate="changeLang('zh')" i18n="topbar.chinese">Chinese</a></li>
+              </ul>
+            </li>
+            
+          </ul>
+
+          <div class="nav navbar-nav navbar-right" style="display:table; margin-top: 20px">
+            <input class="form-check-input" type="checkbox" value="" id="display_robot" checked.bind="gameRobot" >
+            <label class="form-check-label" for="display_robot">
+              Robot Mode
+            </label>
+          </div>
+
+          <form class="navbar-form navbar-left" role="search" style="display:table; margin-top: 15px">
+            <div class="form-group">
+              <label class="control-label" i18n="topbar.dealer">Dealer</label>
+              <input type="text" class="form-control input-md" style="width: 130px" placeholder="" value.bind="dealerId" disabled>
+            </div>&nbsp;&nbsp;
+            <div class="form-group">
+              <label class="control-label" i18n="topbar.table">Table</label>
+              <input type="text" class="form-control input-md" style="width: 130px" placeholder="" value.bind="tableCode" disabled>
+            </div>
+            &nbsp;&nbsp;
+            <div class="form-group">
+              <label class="control-label" i18n="topbar.game">Game</label>
+              <input type="text" class="form-control input-md" style="width: 130px" placeholder="" value.bind="gameCode" disabled>
+            </div>
+            
+          </form>
+
+        </div>
+
+      </div>
+    </nav>
+
+    <div class="section" style="background-color: lightblue;">
+      <div class="container" style="margin-left: -15px">
+        <div class="row">
+        <div class="col-lg-12">
+          <table style="width: 100%">
+            <tr>
+              <td style="width: 25%">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title" i18n="game.info">Info</h3>
+                  </div>
+                  <div class="panel-body" style="min-height: 360px; max-height: 360px; overflow: hidden;">
+                    <div class="form-group">
+                      <label for="display_round">Round ID</label>
+                      <input type="text" class="form-control" id="display_round" placeholder="Round ID" value.bind="gameRound" readonly>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="display_hold" checked.bind="gameHold" onclick="return false;">
+                      <label class="form-check-label" for="display_hold">
+                        Holding Game
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="display_tail" checked.bind="gameTail" onclick="return false;">
+                      <label class="form-check-label" for="display_tail">
+                        Last Hand
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td style="width: 35%">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title" i18n="game.log">Log</h3>
+                  </div>
+                  <div class="panel-body" id="cardpool" style="position: relative; min-height: 360px; max-height: 360px; background-color: grey;">
+                    <div class="input-group" style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 100%; ">
+                      <textarea id="main_logger" class="form-control" wrap="off" rows="16" value.bind="logData" onkeypress="event.preventDefault();" style="width: 100%; height: 100%; overflow: auto"></textarea>
+                    </div>
+                    
+                  </div>
+                </div>
+              </td>
+
+              <td style="width: 40%">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title" i18n="game.video">Video</h3>
+                  </div>
+                  <div class="panel-body" style="min-height: 360px; max-height: 360px; overflow-y: auto;">
+                    
+                  </div>
+                </div>
+              </td>
+
+            </tr>
+          </table>
+        </div>
+          
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="background-color: lightblue;">
+      <div class="container" style="margin-left: -15px">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title" i18n="game.operation">Operation</h3>
+              </div>
+              <div class="panel-body" style="background-color: grey;">
+                <button type="button" class="btn btn-default ${canGoAfterShuffling ? '' : 'disabled'}" click.trigger="sendShufflingDone()" >Shuffling Done</button>
+                <button type="button" class="btn btn-default ${canOpenTable ? '' : 'disabled'}" click.trigger="sendOpenTable()" >Open Table</button>
+                <button type="button" class="btn btn-default ${canCloseTable ? '' : 'disabled'}" click.trigger="sendCloseTable()" >Close Table</button>
+                <!--
+                <button type="button" class="btn btn-default ${canConfirmResult ? '' : 'disabled'}" click.trigger="sendConfirmResult()">Confirm Game Result</button>
+                -->
+                <button type="button" class="btn btn-default ${canHoldGame ? '' : 'disabled'}" click.trigger="sendHoldGame()">Toggle Holding</button>
+                <button type="button" class="btn btn-default ${canCancelRound ? '' : 'disabled'}" click.trigger="sendCancelRound()">Cancel Round</button>
+                <button type="button" class="btn btn-default ${canSetLastHand ? '' : 'disabled'}" click.trigger="sendSetLastHand()">Last Hand</button>
+                <button type="button" class="btn btn-default ${canVoidCard ? '' : 'disabled'}" click.trigger="sendVoidCard()">Void Card</button>
+                <button type="button" class="btn btn-default ${canScanCard ? '' : 'disabled'}" click.trigger="sendScanCard()">Scan Card</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="background-color: lightblue;">
+      <div class="container" style="margin-left: -15px">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title" i18n="game.cards">Cards</h3>
+              </div>
+              <div class="panel-body" style="min-height: 150px; max-height: 150px; background-color: grey;">
+                <table if.bind="gameCode == 'baccarat'" style="width:100%;">
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:center">Player</td>
+                    <td style="width:10%">&nbsp;</td>
+                    <td style="width:40%; text-align:center">Banker</td>
+                  </tr>
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:right">
+                      <div style="width:100%; text-align:right; float:right">
+                        <img if.bind="playerCards.length >= 3" src="${'img/cards/' + playerCards[2]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="playerCards.length >= 2" src="${'img/cards/' + playerCards[1]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="playerCards.length >= 1" src="${'img/cards/' + playerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                    </td>
+                    <td style="width:10%">&nbsp;</td>
+                    <td style="width:40%; text-align:left">
+                      <div style="width:100%; text-align:left; float:left">
+                        <img if.bind="bankerCards.length >= 1" src="${'img/cards/' + bankerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="bankerCards.length >= 2" src="${'img/cards/' + bankerCards[1]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="bankerCards.length >= 3" src="${'img/cards/' + bankerCards[2]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                    </td>
+
+                  </tr>
+                </table>
+                <table if.bind="gameCode =='lucky7'" style="width:100%;">
+                  <tr style="width:100%;">
+                    <td style="width:100%; text-align:center">
+                      &nbsp;
+                    </td>
+                  </tr>
+                  <tr style="width:100%;">
+                    <td style="width:100%; text-align:center">
+                      <img if.bind="playerCards.length >= 1" src="${'img/cards/' + playerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                    </td>
+                  </tr>
+                </table>
+                <table if.bind="gameCode == 'andar-bahar'" style="width:100%;">
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:center">Bahar</td>
+                    <td style="width:20%; text-align:center">Joker&nbsp;</td>
+                    <td style="width:40%; text-align:center">Andar</td>
+                  </tr>
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:center">
+                      <div if.bind="playerCards && playerCards.length <= 6" style="width:100%; text-align:center; float:auto">                        
+                        <img repeat.for="card of playerCards" src="${'img/cards/' + card  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                      <div if.bind="playerCards && playerCards.length > 6" style="width:100%; text-align:center; float:auto">                        
+                        <img repeat.for="i of 6" src="${'img/cards/' + playerCards[playerCards.length - 6 + i]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                    </td>
+                    <td style="width:20%; text-align:center">
+                      <img if.bind="headerCards.length >= 1" src="${'img/cards/' + headerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                    </td>
+                    <td style="width:40%; text-align:center">
+                      <div if.bind="bankerCards && bankerCards.length <= 6" style="width:100%; text-align:center; float:auto">
+                        <img repeat.for="card of bankerCards" src="${'img/cards/' + card  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                      <div if.bind="bankerCards && bankerCards.length > 6" style="width:100%; text-align:center; float:auto">                        
+                        <img repeat.for="i of 6" src="${'img/cards/' + bankerCards[bankerCards.length - 6 + i]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                    </td>
+
+                  </tr>
+                </table>
+                <table if.bind="gameCode == 'teen-patti'" style="width:100%;">
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:center">Player A</td>
+                    <td style="width:10%">&nbsp;</td>
+                    <td style="width:40%; text-align:center">Player B</td>
+                  </tr>
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:center">
+                      <div style="width:100%; text-align:center; float:auto">                        
+                        <img if.bind="playerCards.length >= 1" src="${'img/cards/' + playerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="playerCards.length >= 2" src="${'img/cards/' + playerCards[1]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="playerCards.length >= 3" src="${'img/cards/' + playerCards[2]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                    </td>
+                    <td style="width:10%">&nbsp;</td>
+                    <td style="width:40%; text-align:center">
+                      <div style="width:100%; text-align:center; float:auto">
+                        <img if.bind="bankerCards.length >= 1" src="${'img/cards/' + bankerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="bankerCards.length >= 2" src="${'img/cards/' + bankerCards[1]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                        <img if.bind="bankerCards.length >= 3" src="${'img/cards/' + bankerCards[2]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
+                      </div>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="alert alert-danger alert-dismissible fade-in" show.bind="!isEmptyAlertMessage" role="alert">
+                <button type="button" class="close" click.delegate="dismissAlertMessage()" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>Error: </strong> ${alertMessage}
+            </div>
+        </div>
+    </div>
+
+</template>
