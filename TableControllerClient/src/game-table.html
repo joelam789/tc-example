@@ -156,28 +156,38 @@
               <div class="panel-body" style="min-height: 150px; max-height: 150px; background-color: grey;">
                 <table if.bind="gameCode == 'baccarat'" style="width:100%;">
                   <tr style="width:100%;">
-                    <td style="width:40%; text-align:center">Player</td>
+                    <td style="width:40%; text-align:center">Player  ( ${playerScore} )</td>
                     <td style="width:10%">&nbsp;</td>
-                    <td style="width:40%; text-align:center">Banker</td>
+                    <td style="width:40%; text-align:center">Banker  ( ${bankerScore} )</td>
                   </tr>
                   <tr style="width:100%;">
                     <td style="width:40%; text-align:right">
-                      <div style="width:100%; text-align:right; float:right">
+                      <span style="width:30%; text-align:right; float:right">&nbsp;</span>
+                      <span style="width:70%; text-align:right; float:right">
                         <img if.bind="playerCards.length >= 3" src="${'img/cards/' + playerCards[2]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
                         <img if.bind="playerCards.length >= 2" src="${'img/cards/' + playerCards[1]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
                         <img if.bind="playerCards.length >= 1" src="${'img/cards/' + playerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
-                      </div>
+                      </span>
+                      
                     </td>
                     <td style="width:10%">&nbsp;</td>
                     <td style="width:40%; text-align:left">
-                      <div style="width:100%; text-align:left; float:left">
+                      <span style="width:30%; text-align:left; float:left">&nbsp;</span>
+                      <span style="width:70%; text-align:left; float:left">
                         <img if.bind="bankerCards.length >= 1" src="${'img/cards/' + bankerCards[0]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
                         <img if.bind="bankerCards.length >= 2" src="${'img/cards/' + bankerCards[1]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
                         <img if.bind="bankerCards.length >= 3" src="${'img/cards/' + bankerCards[2]  + '.png'}" style="object-fit: contain; margin-top: 0px" />
-                      </div>
+                      </span>
                     </td>
 
                   </tr>
+
+                  <tr style="width:100%;">
+                    <td style="width:40%; text-align:center">${playerWinMsg}</td>
+                    <td style="width:10%">&nbsp;</td>
+                    <td style="width:40%; text-align:center">${bankerWinMsg}</td>
+                  </tr>
+
                 </table>
                 <table if.bind="gameCode =='lucky7'" style="width:100%;">
                   <tr style="width:100%;">

@@ -331,6 +331,31 @@ namespace TableGame.GameService
             m_Game.AddRequest(ctx, req, process);
         }
 
+        protected int GetScore(string cards)
+        {
+            if (cards.Length <= 0) return 0;
+            var num = cards[0];
+            switch(num)
+            {
+                case 'A':
+                    return 1;
+                case 'T':
+                case 'J':
+                case 'Q':
+                case 'K':
+                    return 10;
+                default:
+                    return Convert.ToInt32(num.ToString());
+            }
+        }
+
+        protected int GetScore(List<string> cards)
+        {
+            var total = 0;
+            foreach (var card in cards) total += GetScore(card);
+            return total % 10;
+        }
+
         protected virtual void ProcessScanCardRequest(BaseTableGame tableGame, RequestContext reqCtx, string card, string target)
         {
             var reqData = new
@@ -380,6 +405,11 @@ namespace TableGame.GameService
                     {
                         player = game.Cards["player"].ToArray(),
                         banker = game.Cards["banker"].ToArray()
+                    },
+                    scores = new 
+                    {
+                        player = GetScore(game.Cards["player"]),
+                        banker = GetScore(game.Cards["banker"])
                     },
                     error_code = 0,
                     error_message = "ok"

@@ -28,6 +28,12 @@ export class GameTablePage {
     playerCards: Array<string> = [];
     bankerCards: Array<string> = [];
 
+    playerScore: number = 0;
+    bankerScore: number = 0;
+
+    playerWinMsg: string = "";
+    bankerWinMsg: string = "";
+
     logData: string = "";
     logLines: Array<string> = [];
 
@@ -254,7 +260,26 @@ export class GameTablePage {
             this.playerCards = this.gameState.gameSnapshot.cards.player;
             this.bankerCards = this.gameState.gameSnapshot.cards.banker;
 
-            //console.log(this.headerCards);
+            this.playerScore = this.playerCards.length > 0 ? this.gameState.gameSnapshot.scores.player : 0;
+            this.bankerScore = this.bankerCards.length > 0 ? this.gameState.gameSnapshot.scores.banker : 0;
+
+            if (this.gameStatus.indexOf("ConfirmationTime") >= 0) {
+                if (this.playerScore > this.bankerScore) {
+                    this.playerWinMsg = "WIN";
+                    this.bankerWinMsg = "";
+                } else if (this.playerScore < this.bankerScore) {
+                    this.playerWinMsg = "";
+                    this.bankerWinMsg = "WIN";
+                } else {
+                    this.playerWinMsg = "TIE";
+                    this.bankerWinMsg = "TIE";
+                }
+            } else {
+                this.playerWinMsg = "";
+                this.bankerWinMsg = "";
+            }
+
+            //console.log(this.playerCards);
         }
         
     }

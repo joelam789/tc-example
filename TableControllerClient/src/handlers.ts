@@ -50,6 +50,7 @@ export class ScanCardHandler implements MessageHandler {
                 if (msg.hold != undefined) messenger.gameState.gameSnapshot.hold = msg.hold;
                 if (msg.tail != undefined) messenger.gameState.gameSnapshot.tail = msg.tail;
                 if (msg.cards != undefined) messenger.gameState.gameSnapshot.cards = msg.cards;
+                if (msg.scores != undefined) messenger.gameState.gameSnapshot.scores = msg.scores;
                 messenger.dispatch(new UI.GameStatus(msg));
             } else {
                 console.log("Failed to send scan-card message");
