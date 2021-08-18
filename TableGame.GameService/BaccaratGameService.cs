@@ -331,7 +331,7 @@ namespace TableGame.GameService
             m_Game.AddRequest(ctx, req, process);
         }
 
-        protected int GetScore(string cards)
+        protected virtual int GetScore(string cards)
         {
             if (cards.Length <= 0) return 0;
             var num = cards[0];
@@ -349,7 +349,7 @@ namespace TableGame.GameService
             }
         }
 
-        protected int GetScore(List<string> cards)
+        public virtual int GetScore(List<string> cards)
         {
             var total = 0;
             foreach (var card in cards) total += GetScore(card);
